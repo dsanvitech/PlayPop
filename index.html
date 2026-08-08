@@ -84,7 +84,7 @@
       const card = document.createElement(isLive ? 'a' : 'div');
       card.className = 'lineup-card' + (isLive ? ' is-live' : '');
       card.style.setProperty('--tc', meta.color);
-      if (isLive) card.href = `games/${game.slug}/index.html`;
+      if (isLive) card.href = `games/${game.slug}/`;
       card.innerHTML = `
         <div class="lineup-thumb">
           <span class="lineup-glyph">${meta.glyph}</span>
@@ -112,4 +112,3 @@
   </script>
 </body>
 </html>
-
