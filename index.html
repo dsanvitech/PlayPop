@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PlayPop — Games that go pop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <section class="sky">
+    <div class="bubble-field" id="bubbleField"></div>
+
+    <div class="panel">
+
+      <nav class="panel-nav">
+        <div class="panel-brand"><span class="brand-bubble"></span> Play<span class="pop">Pop</span></div>
+        <div class="panel-links">
+          <a href="#lineup">Games</a>
+          <a href="#about">About</a>
+        </div>
+        <div class="panel-actions">
+          <button class="icon-btn" aria-label="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+          <button class="icon-btn menu-btn" aria-label="Menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </nav>
+
+      <div class="panel-grid">
+
+        <div class="stat-card">
+          <div class="stat-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <h3>Built for popping in</h3>
+          <p>A free browser arcade, one game at a time.</p>
+          <button class="btn-panel btn-panel-primary" id="popAllBtn">Pop the sky</button>
+          <p class="stat-count">bubbles popped: <b id="popCount">0</b></p>
+        </div>
+
+        <div class="showcase-tile">
+          <div class="showcase-glow"></div>
+          <span class="showcase-tag">first drop &middot; loading</span>
+          <h2>Games that go <em>pop.</em></h2>
+          <p>No downloads. No signups. The first game is being built right now &mdash; pop bubbles above while you wait.</p>
+        </div>
+
+        <div class="side-card">
+          <span class="side-badge">LIVE</span>
+          <h4>Bubble Field</h4>
+          <p>The sky above is playable. Tap any orb.</p>
+          <div class="side-meta">
+            <span>&#9889; instant</span>
+            <span>&#127918; mini-game</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="lineup-row" id="lineup">
+        <div class="lineup-head">
+          <h3>Coming soon</h3>
+          <span id="lineupCount"></span>
+        </div>
+        <div class="lineup-scroll" id="lineupScroll"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer id="about">PlayPop &mdash; one game at a time.</footer>
+
+  <script src="js/games-data.js"></script>
+  <script>
+    const scroll = document.getElementById('lineupScroll');
+    document.getElementById('lineupCount').textContent = GAMES.length + ' queued';
+
+    GAMES.forEach(game => {
+      const meta = CATEGORY_META[game.category];
+      const isLive = game.status === 'live';
+      const card = document.createElement(isLive ? 'a' : 'div');
+      card.className = 'lineup-card' + (isLive ? ' is-live' : '');
+      card.style.setProperty('--tc', meta.color);
+      if (isLive) card.href = `games/${game.slug}/index.html`;
+      card.innerHTML = `
+        <div class="lineup-thumb">
+          <span class="lineup-glyph">${meta.glyph}</span>
+          ${isLive ? '<span class="lineup-play">PLAY</span>' : ''}
+        </div>
+        <div class="lineup-info">
+          <strong>${game.title}</strong>
+          <span>${meta.label} &middot; ${isLive ? 'live' : 'soon'}</span>
+        </div>
+      `;
+      scroll.appendChild(card);
+    });
+  </script>
+  <script src="js/bubbles.js"></script>
+  <script>
+    document.getElementById('popAllBtn').addEventListener('click', () => {
+      document.querySelectorAll('.bg-bubble').forEach(b => {
+        const rect = b.getBoundingClientRect();
+        b.dispatchEvent(new MouseEvent('click', {
+          clientX: rect.left + rect.width / 2,
+          clientY: rect.top + rect.height / 2
+        }));
+      });
+    });
+  </script>
+</body>
+</html>
